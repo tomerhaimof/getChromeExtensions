@@ -37,11 +37,4 @@ for i in users:
 				print("Printing extensions for user: " + i + "/" + username)
 				for e in extensions:
 					checkExtension(f,e,url,headers)
-	'''
-	if os.path.isdir("/Users/%s/Library/Application Support/Google/Chrome/Default/Extensions" % (i)):
-		extensions=os.listdir("/Users/%s/Library/Application Support/Google/Chrome/Default/Extensions" % (i))
-		print("Printing extensions for user: " + i)
-		for e in extensions:
-			checkExtension("Default",e,url,headers)
-	'''
-
+	
