@@ -7,9 +7,6 @@ import json
 from threading import Thread
 
 
-excludes = ["pkedcjkdefgpdelpbcmbmeomcjbeemfm","nmmhkkegccagdldgiimedpiccmgmieda",".DS_Store", "Temp"]
-
-
 def checkExtension(result,folderName,extensionID,index,url,headers):
 	r = requests.get(url+extensionID, headers=headers)
 
