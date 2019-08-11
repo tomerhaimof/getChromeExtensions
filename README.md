@@ -10,10 +10,14 @@
   
 # On Win10, open powershell and run:
     ./getChromeExtensions.ps1
-  In case you get an error regarding "Execution Policy", just run:
+  In case you get an error regarding "Execution Policy", just run:</br>
+    ```
     powershell.exe -executionpolicy bypass -file FULLFILEPATHHERE
-  For example:
+    ```
+  For example:</br>
+    ```
     powershell.exe -executionpolicy bypass -file "c:\cyberiko\getChromeExtensions.ps1"
+    ```
   In order to get information from all users, it should run with admin privileges (Run As Administrator) 
   
 
