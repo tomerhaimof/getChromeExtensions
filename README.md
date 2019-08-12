@@ -3,13 +3,20 @@
   Available for MacOS, Linux and Win10!
 
 # On MacOS/Linux, open terminal and run:
+    ```
   	chmod u+x getChromeExtensions.py
   	./getChromeExtensions.py
+    ```
   In order to get information from all users, it should run with "sudo":
+    ```
   	sudo ./getChromeExtensions.py
-  
+    ```
+    <bold>Please note that "requests" library is required</bold></br>
+    
 # On Win10, open powershell and run:
+    ```
     ./getChromeExtensions.ps1
+    ```
   In case you get an error regarding "Execution Policy", just run:</br>
     ```
     powershell.exe -executionpolicy bypass -file FULLFILEPATHHERE
