@@ -1,4 +1,6 @@
- 
+#This script will print all of the Google Xhrome extensions from all users
+#Written by Tomer Haimof
+
 #!/usr/bin/python
 
 import requests
