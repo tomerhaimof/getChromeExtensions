@@ -7,11 +7,11 @@
   	chmod u+x getChromeExtensions.py
   	./getChromeExtensions.py
     ```
-  In order to get information from all users, it should run with "sudo":
+  In order to get information from all users, it should run with "sudo":</br<
     ```
   	sudo ./getChromeExtensions.py
     ```
-    <bold>Please note that "requests" library is required</bold></br>
+    <b>Please note that "requests" library is required</b></br>
     
 # On Win10, open powershell and run:
     ```
