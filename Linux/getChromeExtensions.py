@@ -43,9 +43,9 @@ resetBold='\033[0m'
 for i in users:
 	baseDirs=[]
 	if i=='root':
-		if os.path.isdir("/root/.config/chromium/Extensions"):
+		if os.path.isfile("/root/.config/chromium/Local State"):
 			baseDirs.append("/root/.config/chromium")
-		if os.path.isdir("/root/.config/google-chrome/Extensions"):
+		if os.path.isfile("/root/.config/google-chrome/Local State"):
 			baseDirs.append("/root/.config/chromium")
 		if len(baseDirs) == 0:
 			continue
