@@ -54,30 +54,31 @@ for i in users:
 			baseDirs.append("/home/%s/.config/chromium" % (i))
 		if os.path.isfile("/home/%s/.config/google-chrome/Local State" % (i)):
 			baseDirs.append("/home/%s/.config/google-chrome" % (i))
-		if len(baseDirs) != 0:
-			for baseDir in baseDirs:
-				baseDirSplit = baseDir.split("/")
-				browser = baseDirSplit[len(baseDirSplit)-1]
-				with open('%s/Local State' % (baseDir)) as json_file:
-					jsonData=json.load(json_file)
-				folders=os.listdir("%s" % (baseDir))
-				for f in folders:
-					if (f.startswith('Profile ') or f=="Default"):
-						threads = []
-						username=jsonData['profile']['info_cache'][f]['name']
-						extensionsID=os.listdir("%s/%s/Extensions" % (baseDir,f))
-						for e in excludes:
-							if e in extensionsID:
-								extensionsID.remove(e)
-						result = {}
-						print(bold + "\nPrinting extensions for user: " + i + "\\" + username + " (browser: " + browser +")" + resetBold)
-						for x in range(len(extensionsID)):
-							process = Thread(target=checkExtension, args=[result,f, extensionsID[x], x, url, headers])
-							process.start()
-							threads.append(process)
-						for process in threads:
-							process.join()
+		if len(baseDirs) == 0:
+			continue
+		for baseDir in baseDirs:
+			baseDirSplit = baseDir.split("/")
+			browser = baseDirSplit[len(baseDirSplit)-1]
+			with open('%s/Local State' % (baseDir)) as json_file:
+				jsonData=json.load(json_file)
+			folders=os.listdir("%s" % (baseDir))
+			for f in folders:
+				if (f.startswith('Profile ') or f=="Default"):
+					threads = []
+					username=jsonData['profile']['info_cache'][f]['name']
+					extensionsID=os.listdir("%s/%s/Extensions" % (baseDir,f))
+					for e in excludes:
+						if e in extensionsID:
+							extensionsID.remove(e)
+					result = {}
+					print(bold + "\nPrinting extensions for user: " + i + "\\" + username + " (browser: " + browser +")" + resetBold)
+					for x in range(len(extensionsID)):
+						process = Thread(target=checkExtension, args=[result,f, extensionsID[x], x, url, headers])
+						process.start()
+						threads.append(process)
+					for process in threads:
+						process.join()
 
-						
-						for n in range(len(result)):
-							print ("\t" +result[n]['folder'] + ":  " + result[n]['extension'] + ":  " + result[n]['name'])
+					
+					for n in range(len(result)):
+						print ("\t" +result[n]['folder'] + ":  " + result[n]['extension'] + ":  " + result[n]['name'])
