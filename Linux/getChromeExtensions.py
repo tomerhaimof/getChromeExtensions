@@ -4,7 +4,6 @@
 This script will print all of the Google Chrome and Chromium extensions from all users
 Written by Tomer Haimof
 '''
-
 import requests
 import re
 import os
@@ -51,9 +50,9 @@ for i in users:
 		if len(baseDirs) == 0:
 			continue
 	else:
-		if os.path.isdir("/home/%s/.config/chromium" % (i)):
+		if os.path.isfile("/home/%s/.config/chromium/Local State" % (i)):
 			baseDirs.append("/home/%s/.config/chromium" % (i))
-		if os.path.isdir("/home/%s/.config/google-chrome" % (i)):
+		if os.path.isfile("/home/%s/.config/google-chrome/Local State" % (i)):
 			baseDirs.append("/home/%s/.config/google-chrome" % (i))
 		if len(baseDirs) != 0:
 			for baseDir in baseDirs:
