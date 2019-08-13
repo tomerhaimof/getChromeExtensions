@@ -46,7 +46,7 @@ for i in users:
 		if os.path.isfile("/root/.config/chromium/Local State"):
 			baseDirs.append("/root/.config/chromium")
 		if os.path.isfile("/root/.config/google-chrome/Local State"):
-			baseDirs.append("/root/.config/chromium")
+			baseDirs.append("/root/.config/google-chrome")
 		if len(baseDirs) == 0:
 			continue
 	else:
