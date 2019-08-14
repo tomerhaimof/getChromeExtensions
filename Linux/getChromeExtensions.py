@@ -8,22 +8,26 @@ import requests
 import re
 import os
 import json
+from requests.exceptions import ConnectionError
 from threading import Thread
 
 
 def checkExtension(result,folderName,extensionID,index,url,headers):
-	r = requests.get(url+extensionID, headers=headers)
+	try:
+		r = requests.get(url+extensionID, headers=headers)
 
-	if r.status_code == 200:
-		x=re.search("title\" content=\"(.*?)>", r.content)
-		name=x.group(0).split("\"")[2]
-		result[index]={"folder": folderName,"extension": extensionID, 'name': name}
-		#print(folderName + ":  " + extensionID + ":  " + name)
-	elif r.status_code == 404 and extensionID not in excludes:
-		result[index]={"folder": folderName,"extension": extensionID, 'name': "UNKNOWN"}
-		#print(folderName + ":  " + extensionID + ":  " + "UNKNOWN")
-	else:
-		result[index]={"folder": folderName,"extension": extensionID, 'name': "ERROR"}
+		if r.status_code == 200:
+			x=re.search("title\" content=\"(.*?)>", r.content)
+			name=x.group(0).split("\"")[2]
+			result[index]={"folder": folderName,"extension": extensionID, 'name': name}
+			#print(folderName + ":  " + extensionID + ":  " + name)
+		elif r.status_code == 404 and extensionID not in excludes:
+			result[index]={"folder": folderName,"extension": extensionID, 'name': "UNKNOWN"}
+			#print(folderName + ":  " + extensionID + ":  " + "UNKNOWN")
+		else:
+			result[index]={"folder": folderName,"extension": extensionID, 'name': "ERROR"}
+	except ConnectionError as e:
+		print "There was an network connection error, please check you can reach https://chrome.google.com and try again"
 
 
 
