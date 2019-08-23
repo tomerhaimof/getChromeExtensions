@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+'''
+This script will print all of the Google Chrome and Chromium extensions from all users
+Written by Tomer Haimof
+'''
+
 import requests
 import re
 import os
