@@ -1,11 +1,7 @@
-﻿# This script will get all user's extensions ID's and query Google for its names.
-# Eventually, it will print all the relevant information
-# Written By Tomer Haimof
-
-
 # This script will get all user's extensions ID's and query Google for its names.
 # Eventually, it will print all the relevant information
 # Written By Tomer Haimof
+
 
 
 function checkExtensions
