@@ -3,6 +3,11 @@
 # Written By Tomer Haimof
 
 
+# This script will get all user's extensions ID's and query Google for its names.
+# Eventually, it will print all the relevant information
+# Written By Tomer Haimof
+
+
 function checkExtensions
 {
     Param($result,$folderName,$extensionID,$url,$headers)
@@ -42,34 +47,39 @@ foreach ($u in $users)
     {
         $baseDir = "C:\Users\$u\AppData\Local\Google\Chrome\User Data"
         if(Test-Path "$baseDir\Local State"){
-            $jsonData = Get-Content -Raw -Path "$baseDir\Local State" | ConvertFrom-Json}
-        $folders=(Get-ChildItem "$baseDir" -Directory).Name
-        foreach ($f in $folders)
-        {
-            if($f -eq "Default" -or $f.startsWith("Profile "))
+            $jsonData = Get-Content -Raw -Path "$baseDir\Local State" | ConvertFrom-Json
+            $folders=(Get-ChildItem "$baseDir" -Directory).Name
+            foreach ($f in $folders)
             {
-                $username=$jsonData.profile.info_cache.$f.name
-                [System.Collections.ArrayList]$extensionsID=(Get-ChildItem "$baseDir\$f\Extensions").Name
-                foreach($e in $excludes)
+                if($f -eq "Default" -or $f.startsWith("Profile "))
                 {
-                    if($extensionsID.Contains($e))
+                    $username=$jsonData.profile.info_cache.$f.name
+                    if (Test-Path "$baseDir\$f\Extensions")
                     {
-                        [void]$extensionsID.Remove($e)
+                        [System.Collections.ArrayList]$extensionsID=(Get-ChildItem "$baseDir\$f\Extensions").Name
+                        foreach($e in $excludes)
+                        {
+                            if($extensionsID.Contains($e))
+                            {
+                                [void]$extensionsID.Remove($e)
+                            }
+                        }
+                        [System.Collections.ArrayList]$results=@()
+                        foreach($e in $extensionsID)
+                        {
+                            checkExtensions -result $results -folderName $f -extensionID $e -url $url -headers $headers
+                        }
+                        Write-Host "`nPrinting extensions for user $u\$username`:" -ForegroundColor Green
+                        foreach ($r in $results)
+                        {
+                            Write-Host `t $r.folder ": " $r.extension ": " $r.name
+                        }
                     }
-                }
-                [System.Collections.ArrayList]$results=@()
-                foreach($e in $extensionsID)
-                {
-                    checkExtensions -result $results -folderName $f -extensionID $e -url $url -headers $headers
-                }
-                Write-Host "`nPrinting extensions for user $u\$username"":"
-                foreach ($r in $results)
-                {
-                    Write-Host $r.folder ": " $r.extension ": " $r.name
-                }
             
+                }
             }
-        }
+          }
     }
 }
+
 
