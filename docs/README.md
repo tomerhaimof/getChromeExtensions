@@ -1,7 +1,10 @@
 
 # getChromeExtensions 
   Get all of currently installed chrome extensions from all users and profiles.
+  </br>
   Available for MacOS, Linux and Win10!
+  </br>
+  --> On Linux it will also extract all of the domains and IPs which are inside the js/json/txt/html files of the extensions
 
   <a href="https://github.com/cyberiko/getChromeExtensions">Go to github repo!</a>
 
