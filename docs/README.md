@@ -3,6 +3,7 @@
   Get all of currently installed chrome extensions from all users and profiles.
   Available for MacOS, Linux and Win10!
 
+  <a href="https://github.com/cyberiko/getChromeExtensions">Go to github repo!</a>
 
   <b>On MacOS/Linux, open terminal and run:
   </b></br>
