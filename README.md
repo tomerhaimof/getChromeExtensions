@@ -1,4 +1,4 @@
-# getChromeExtensions
+# getChromeExtensions 
   Get all of currently installed chrome extensions from all users and profiles.
   Available for MacOS, Linux and Win10!
 
@@ -35,3 +35,4 @@
   
 
 
+# By Tomer Haimof
