@@ -42,7 +42,7 @@ def checkExtension(result,folderName,extensionID,index,url,headers,path,files,ip
 		else:
 			result[index]={"folder": folderName,"extension": extensionID, 'name': "ERROR"}
 	except ConnectionError as e:
-		print "There was an network connection error, please check you can reach https://chrome.google.com and try again"
+		print "There was a network connection error, please check you can reach https://chrome.google.com and try again"
 	
 	extractDomainsAndIPs(path,files)
 		
@@ -127,7 +127,7 @@ def main():
 					for n in range(len(result)):
 						print ("\n\t" + BOLD + result[n]['folder'] + ":  " + result[n]['extension'] + ":  " + result[n]['name']) + RESETBOLD
 						if str(len(filteredDomains)) > "0":
-							print BOLD + "\t\t" + "Printing all domains found in extension's files (except safe sites configured in the script):" + RESETBOLD
+							print BOLD + "\t\t" + "Printing all URLs found in extension's files (except safe sites configured in the script):" + RESETBOLD
 							for f in filteredDomains:
 								print "\t\t\t" + f
 						if str(len(ips)) != "0":
