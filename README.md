@@ -6,41 +6,33 @@
   -->  On Linux it will also extract all of the domains and IPs which are inside the js/json/txt/html files of the extensions
 
 
-  <b>On MacOS/Linux, open terminal and run:
-  </b>
-</br>
+## On MacOS/Linux, open terminal and run:
    
   	chmod u+x getChromeExtensions.py
   	./getChromeExtensions.py
    
     
-  In order to get information from all users, it should run with "sudo":</br>
+In order to get information from all users, it should run with "sudo":</br>
   
-   
   	sudo ./getChromeExtensions.py
    
     
-   <b>Please note that "requests" library is required</b>
-</br>
+## Please note that "requests" library is required
  
-</br>
-   <b>On Win10, open powershell and run:</b>
-</br>
+## On Win10, open powershell and run:</b>
     
     ./getChromeExtensions.ps1
     
-   In case you get an error regarding "Execution Policy", just run:
-</br>
+In case you get an error regarding "Execution Policy", just run:
     
     powershell.exe -executionpolicy bypass -file FULLFILEPATHHERE
     
-   For example:
-</br>
+For example:
     
     powershell.exe -executionpolicy bypass -file "c:\cyberiko\getChromeExtensions.ps1"
     
-   In order to get information from all users, it should run with admin privileges (Run As Administrator) 
+In order to get information from all users, it should run with admin privileges (Run As Administrator) 
   
 
 
-# By Tomer Haimof
+## By Tomer Haimof
