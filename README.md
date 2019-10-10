@@ -3,7 +3,7 @@
   </br>
   Available for MacOS, Linux and Win10!
   </br>
-  -->  On Linux it will also extract all of the domains and IPs which are inside the js/json/txt/html files of the extensions
+  -->  <b>On Linux/Win10 it will also extract all of the domains and IPs which are inside the js/json/txt/html files of the extensions</b>
 
 
 ## On MacOS/Linux, open terminal and run:
