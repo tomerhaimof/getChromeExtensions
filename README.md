@@ -22,6 +22,7 @@ In order to get information from all users, it should run with "sudo":</br>
 ## On Win10, open powershell and run:</b>
     
     ./getChromeExtensions.ps1
+    Get-ChromeExtensions [-checkURLs]
     
 In case you get an error regarding "Execution Policy", just run:
     
