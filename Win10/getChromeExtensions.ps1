@@ -131,7 +131,7 @@ function checkExtensions
 function Get-ChromeExtensions
 {
 
-    Param([switch]$checkURLs)
+    Param([switch]$checkURLs=$true)
 
     $googleUrl = "https://chrome.google.com/webstore/detail"
     $headers=@{"accept-language"="en-US,en;q=0.9"}
