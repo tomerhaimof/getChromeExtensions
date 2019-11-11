@@ -1,6 +1,6 @@
 <#
     Get-ChromeExtensions will print out the names of all of the Chrome's extensions from all users (when run with admin permissions)
-    You can also call the "checkURLs" argument. this will do 2 things:
+    You can also call the "checkURLs" argument (it will be called by default). this will do 2 things:
         1) Print all of the URLs which were found on all of the json,js,txt,html files.
         2) Check all of the above URLs against urlhaus database and will color malware URLs with red
     
