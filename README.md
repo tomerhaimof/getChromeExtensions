@@ -1,8 +1,10 @@
 # getChromeExtensions 
   Get all of currently installed chrome extensions from all users and profiles.
   </br>
+  In addition, it will extract all of the URLs and IPs which are inside the js/json/txt/html/md files of the extensions.
+  </br>
   Available for MacOS, Linux and Win10!
-</br><b> --> On Linux it will also extract all of the domains and IPs which are inside the js/json/txt/html files of the extensions</b></br>
+</br>
  <b> --> On Win10 it will also verify the URLs against urlhaus db!</b>
 
 
