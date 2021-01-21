@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 '''
-This script will print all of the Google Chrome extensions from all users
+This script will print all of the Google Chrome and Chromium extensions from all users
 In addition, it will print all domains and IPs extracted from js,
     json,txt and html files inside extensions
 
@@ -22,14 +22,23 @@ IP_REGEX_PATTERN = r"(((?<![\.0-9])[0-9]|(?<![\.0-9])([1-9][0-9])|(?<![\.0-9])(1
     + r"(?<![\.0-9])(2[0-4][0-9]|25[0-5]))\.(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)" \
     + r"{2}([0-9](?![\.0-9])|([1-9][0-9])(?![\.0-9])|(1[0-9]{2})(?![\.0-9])|(2[0-4][0-9])" \
     + r"(?![\.0-9])|(25[0-5])(?![\.0-9])))"
-DOMAIN_REGEX_PATTERN = r"(https?:\/\/(([0-9a-zA-Z\-]?)*\.)+(com|il|net|io|me|org|nl" \
-    + r"|cz|br|gov|il|ru|ir)\/[^\"^\{^\}^'^\(^\)^ ^>^\s]*[\"\{\}' \(\)>]{0})"
+DOMAIN_REGEX_PATTERN = r"(https?:\/\/(([0-9a-zA-Z\-]?)*\.)+(aero|asia|biz|cat|com|coop|edu|gov|" \
+ + "info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|" \
+ + "ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bl|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|" \
+ + "cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi" \
+ + "|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|" \
+ + "hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|" \
+ + "li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my" \
+ + "|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|" \
+ + "qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tf|" \
+ + "tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws" \
+ + "|ye|yt|yu|za|zm|zw)\/[^\"^\{^\}^'^\(^\)^ ^>^\s^\*^<^>^\\\,]*[\,\"\{\}' \(\)>]{0})"
 SAFESITES = ["google.com", "wikipedia.org", "w3.org", "googleapis.com", "mozilla.org",
              "microsoft.com", "jquery.com", "custom-cursor.com"]
 BOLD = '\033[1m'
 RESETBOLD = '\033[0m'
-#Exclude trusted extensions: "Chrome Media Router"
-EXCLUDES = ["pkedcjkdefgpdelpbcmbmeomcjbeemfm",
+#Exclude trusted extensions: "Chrome Media Router", "lastpass"
+EXCLUDES = ["pkedcjkdefgpdelpbcmbmeomcjbeemfm", "hdokiejnpimakedhajhdlcegeplioahd",
             ".DS_Store", "Temp"]
 
 def get_files_from_path(path, files):
@@ -102,13 +111,16 @@ def main():
 
     for i in users:
         base_dirs = []
+        if os.path.isfile("/Users/%s/Library/Application Support/Chromium/Local State" % (i)):
+            base_dirs.append("/Users/%s/Library/Application Support/Chromium/" % (i))
         if os.path.isfile("/Users/%s/Library/Application Support/Google/Chrome/Local State" % (i)):
             base_dirs.append("/Users/%s/Library/Application Support/Google/Chrome/" % (i))
         if not base_dirs:
             continue
+        print(base_dirs)
         for base_dir in base_dirs:
             base_dir_split = base_dir.split("/")
-            browser = base_dir_split[len(base_dir_split)-1]
+            browser = base_dir_split[len(base_dir_split)-2]
             with open('%s/Local State' % (base_dir)) as json_file:
                 json_data = json.load(json_file)
             folders = os.listdir("%s" % (base_dir))
