@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 '''
-This script will print all of the Google Chrome and Chromium extensions from all users
+This script will print all of the Google Chrome extensions from all users
 In addition, it will print all domains and IPs extracted from js,
     json,txt and html files inside extensions
 
