@@ -12,12 +12,11 @@ import re
 import os
 import json
 from threading import Thread
+import sys
 from requests.exceptions import ConnectionError
 import requests
 
-
 #Some global variables
-
 IP_REGEX_PATTERN = r"(((?<![\.0-9])[0-9]|(?<![\.0-9])([1-9][0-9])|(?<![\.0-9])(1[0-9]{2})|" \
     + r"(?<![\.0-9])(2[0-4][0-9]|25[0-5]))\.(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)" \
     + r"{2}([0-9](?![\.0-9])|([1-9][0-9])(?![\.0-9])|(1[0-9]{2})(?![\.0-9])|(2[0-4][0-9])" \
@@ -32,7 +31,7 @@ DOMAIN_REGEX_PATTERN = r"(https?:\/\/(([0-9a-zA-Z\-]?)*\.)+(aero|asia|biz|cat|co
  + "|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|" \
  + "qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tf|" \
  + "tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws" \
- + "|ye|yt|yu|za|zm|zw)\/[^\"^\{^\}^'^\(^\)^ ^>^\s^\*^<^>^\\\,]*[\,\"\{\}' \(\)>]{0})"
+ + r"|ye|yt|yu|za|zm|zw)\/[^\"^\{^\}^'^\(^\)^ ^>^\s^\*^<^>^\\\,]*[\,\"\{\}' \(\)>]{0})"
 SAFESITES = ["google.com", "wikipedia.org", "w3.org", "googleapis.com", "mozilla.org",
              "microsoft.com", "jquery.com", "custom-cursor.com"]
 BOLD = '\033[1m'
@@ -119,7 +118,7 @@ def main():
             base_dirs.append("/Users/%s/Library/Application Support/Google/Chrome/" % (i))
         if not base_dirs:
             continue
-        print(base_dirs)
+        #print(base_dirs)
         for base_dir in base_dirs:
             base_dir_split = base_dir.split("/")
             browser = base_dir_split[len(base_dir_split)-2]
