@@ -12,6 +12,7 @@ import re
 import os
 import json
 from threading import Thread
+import sys
 from requests.exceptions import ConnectionError
 import requests
 
@@ -74,27 +75,28 @@ def check_extension(result, folder_name, extension_id, index, url, headers, path
         print("There was a network connection error," \
              + "please verify https://chrome.google.com is reachable and try again")
 
-    get_files_from_path(path, files)
+    if len(sys.argv) > 1 and sys.argv[1] == 'checkExtensions':
+        get_files_from_path(path, files)
 
-    for file in files:
-        #print file
-        with open(file, 'r') as content_file:
-            content = content_file.read()
-            ip_ = set(re.findall(IP_REGEX_PATTERN, content))
-            for _ip in ip_:
-                ips.append(_ip[0])
-                #print BOLD + _ip[0] + RESETBOLD + " " + file
-            domain = set(re.findall(DOMAIN_REGEX_PATTERN, content))
-            for _domain in domain:
-                domain_safe = False
-                for site in SAFESITES:
-                    pattern = r"(https?:\/\/(([a-zA-Z0-9\-]*\.)*)?%s\/.*)" % site
-                    if re.match(pattern, _domain[0]):
-                        domain_safe = True
-                if _domain[0].startswith("/") == False and domain_safe != True:
-                    filtered_domains.append(_domain[0])
-                    #print(BOLD + _domain[0].strip() + RESETBOLD + " " + file)
-            result[index]['filtered_domains'] = filtered_domains 
+        for file in files:
+            #print file
+            with open(file, 'r') as content_file:
+                content = content_file.read()
+                ip_ = set(re.findall(IP_REGEX_PATTERN, content))
+                for _ip in ip_:
+                    ips.append(_ip[0])
+                    #print BOLD + _ip[0] + RESETBOLD + " " + file
+                domain = set(re.findall(DOMAIN_REGEX_PATTERN, content))
+                for _domain in domain:
+                    domain_safe = False
+                    for site in SAFESITES:
+                        pattern = r"(https?:\/\/(([a-zA-Z0-9\-]*\.)*)?%s\/.*)" % site
+                        if re.match(pattern, _domain[0]):
+                            domain_safe = True
+                    if _domain[0].startswith("/") == False and domain_safe != True:
+                        filtered_domains.append(_domain[0])
+                        #print(BOLD + _domain[0].strip() + RESETBOLD + " " + file)
+    result[index]['filtered_domains'] = filtered_domains 
 
 
 
@@ -109,6 +111,7 @@ def main():
     headers = {"accept-language": "en-US,en;q=0.9"}
     users = os.listdir("/home")
     users.append('root')
+    message = False
 
     for i in users:
         base_dirs = []
@@ -141,6 +144,11 @@ def main():
                         if ext in extensions_id:
                             extensions_id.remove(ext)
                     result = {}
+                    if message == False:
+                        print(BOLD + "Printing results WITHOUT URLs and IPs. Please add " \
+                         + "\"checkExtensions\" argument in order to print it:\n " \
+                          + "get_chrome_extensions.py checkExtensions\n"  + RESETBOLD)
+                        message = True
                     print(BOLD + "\n\nPrinting extensions for user: " + i + "\\" + username \
                         + " (browser: " + browser +")" + RESETBOLD)
                     for _ext in range(len(extensions_id)):
