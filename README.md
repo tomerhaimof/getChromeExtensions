@@ -11,12 +11,12 @@
 ## On MacOS/Linux, open terminal and run:
    
   	chmod u+x getChromeExtensions.py
-  	./getChromeExtensions.py
+  	./getChromeExtensions.py [checkExtensions]
    
     
 In order to get information from all users, it should run with "sudo":</br>
   
-  	sudo ./getChromeExtensions.py
+  	sudo ./getChromeExtensions.py [checkExtensions]
    
     
 ## Please note that "requests" library is required
