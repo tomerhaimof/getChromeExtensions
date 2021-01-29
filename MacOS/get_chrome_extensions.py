@@ -63,10 +63,8 @@ def check_extension(result, folder_name, extension_id, index, url, headers, path
             found = re.search("title\" content=\"(.*?)>", res.content)
             name = found.group(0).split("\"")[2]
             result[index] = {"folder": folder_name, "extension": extension_id, 'name': name}
-            #print(folder_name + ":  " + extension_id + ":  " + name)
         elif res.status_code == 404 and extension_id not in EXCLUDES:
             result[index] = {"folder": folder_name, "extension": extension_id, 'name': "UNKNOWN"}
-            #print(folder_name + ":  " + extension_id + ":  " + "UNKNOWN")
         else:
             result[index] = {"folder": folder_name, "extension": extension_id, 'name': "ERROR"}
     except ConnectionError as err:
@@ -92,8 +90,8 @@ def check_extension(result, folder_name, extension_id, index, url, headers, path
                         if re.match(pattern, _domain[0]):
                             domain_safe = True
                     if _domain[0].startswith("/") == False and domain_safe != True:
-                        filtered_domains.append(_domain[0])
-                        #print(BOLD + _domain[0].strip() + RESETBOLD + " " + file)
+                        domain_re = re.sub("\.$", "", _domain[0])
+                        filtered_domains.append(domain_re + " -- " + file)
     result[index]['filtered_domains'] = filtered_domains
 
 
