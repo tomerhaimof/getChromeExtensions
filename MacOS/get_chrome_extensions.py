@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 '''
 This script will print all of the Google Chrome and Chromium extensions from all users
@@ -21,7 +21,7 @@ IP_REGEX_PATTERN = r"(((?<![\.0-9])[0-9]|(?<![\.0-9])([1-9][0-9])|(?<![\.0-9])(1
     + r"(?<![\.0-9])(2[0-4][0-9]|25[0-5]))\.(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)" \
     + r"{2}([0-9](?![\.0-9])|([1-9][0-9])(?![\.0-9])|(1[0-9]{2})(?![\.0-9])|(2[0-4][0-9])" \
     + r"(?![\.0-9])|(25[0-5])(?![\.0-9])))"
-DOMAIN_REGEX_PATTERN = r"(https?:\/\/(([0-9a-zA-Z\-]?)*\.)+(aero|asia|biz|cat|com|coop|edu|gov|" \
+URL_REGEX_PATTERN = r"(https?:\/\/(([0-9a-zA-Z\-]?)*\.)+(aero|asia|biz|cat|com|coop|edu|gov|" \
  + "info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|" \
  + "ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bl|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|" \
  + "cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi" \
@@ -36,7 +36,7 @@ SAFESITES = ["google.com", "wikipedia.org", "w3.org", "googleapis.com", "mozilla
              "microsoft.com", "jquery.com", "custom-cursor.com"]
 BOLD = '\033[1m'
 RESETBOLD = '\033[0m'
-#Exclude trusted extensions: "Chrome Media Router", "lastpass"
+# Exclude trusted extensions: "Chrome Media Router", "lastpass"
 EXCLUDES = ["pkedcjkdefgpdelpbcmbmeomcjbeemfm", "hdokiejnpimakedhajhdlcegeplioahd",
             ".DS_Store", "Temp"]
 
@@ -51,8 +51,8 @@ def get_files_from_path(path, files):
                 if file.endswith(ext):
                     files.append(os.path.join(subdirs, file))
 
-def check_extension(result, folder_name, extension_id, index, url, headers, path, files, ips,
-                    domains, filtered_domains):
+def check_extension(result, folder_name, extension_id, url, headers, path, files, ips,
+                    extracted_urls, username):
     '''
         check the given extension
     '''
@@ -62,11 +62,12 @@ def check_extension(result, folder_name, extension_id, index, url, headers, path
         if res.status_code == 200:
             found = re.search("title\" content=\"(.*?)>", res.content)
             name = found.group(0).split("\"")[2]
-            result[index] = {"folder": folder_name, "extension": extension_id, 'name': name}
+            result[username].append({"folder": folder_name, "extension": extension_id, 'name': name})
         elif res.status_code == 404 and extension_id not in EXCLUDES:
-            result[index] = {"folder": folder_name, "extension": extension_id, 'name': "UNKNOWN"}
+            result[username].append({"folder": folder_name, "extension": extension_id, 'name': "UNKNOWN"})
         else:
-            result[index] = {"folder": folder_name, "extension": extension_id, 'name': "ERROR"}
+            result[username].append({"folder": folder_name, "extension": extension_id, 'name': "ERROR"})
+
     except ConnectionError as err:
         print("There was a network connection error," \
              + "please verify https://chrome.google.com is reachable and try again")
@@ -75,25 +76,25 @@ def check_extension(result, folder_name, extension_id, index, url, headers, path
         get_files_from_path(path, files)
 
         for file in files:
-            #print file
             with open(file, 'r') as content_file:
                 content = content_file.read()
                 ip_ = set(re.findall(IP_REGEX_PATTERN, content))
                 for _ip in ip_:
                     ips.append(_ip[0])
-                    #print BOLD + _ip[0] + RESETBOLD + " " + file
-                domain = set(re.findall(DOMAIN_REGEX_PATTERN, content))
-                for _domain in domain:
+                url = set(re.findall(URL_REGEX_PATTERN, content))
+                for _url in url:
                     domain_safe = False
                     for site in SAFESITES:
                         pattern = r"(https?:\/\/(([a-zA-Z0-9\-]*\.)*)?%s\/.*)" % site
-                        if re.match(pattern, _domain[0]):
+                        if re.match(pattern, _url[0]):
                             domain_safe = True
-                    if _domain[0].startswith("/") == False and domain_safe != True:
-                        domain_re = re.sub("\.$", "", _domain[0])
-                        filtered_domains.append(domain_re + " -- " + file)
-    result[index]['filtered_domains'] = filtered_domains
+                    if _url[0].startswith("/") == False and domain_safe != True:
+                        url_re = re.sub("\.$", "", _url[0])
+                        extracted_urls.append({"url": url_re, "file": file})
 
+    for e in result[username]:
+        if e["extension"] == extension_id:
+            e['extracted_urls'] = extracted_urls
 
 
 ### MAIN ###
@@ -101,7 +102,7 @@ def main():
     '''
         Main Function
     '''
-    json_data = ""
+    # json_data = ""
 
     url = "https://chrome.google.com/webstore/detail/"
     headers = {"accept-language": "en-US,en;q=0.9"}
@@ -116,7 +117,6 @@ def main():
             base_dirs.append("/Users/%s/Library/Application Support/Google/Chrome/" % (i))
         if not base_dirs:
             continue
-        #print(base_dirs)
         for base_dir in base_dirs:
             base_dir_split = base_dir.split("/")
             browser = base_dir_split[len(base_dir_split)-2]
@@ -132,43 +132,24 @@ def main():
                         if ext in extensions_id:
                             extensions_id.remove(ext)
                     result = {}
+                    result[str(i + ':' + username)] = []
                     if message == False:
-                        print(BOLD + "Printing results WITHOUT URLs and IPs. Please add " \
-                         + "\"checkExtensions\" argument in order to print it:\n " \
-                          + "get_chrome_extensions.py checkExtensions\n"  + RESETBOLD)
                         message = True
-                    print(BOLD + "\n\nPrinting extensions for user: " + i + "\\" + username \
-                        + " (browser: " + browser +")" + RESETBOLD)
                     for _ext in range(len(extensions_id)):
                         path = "%s/%s/Extensions/%s" % (base_dir, folder, extensions_id[_ext])
-                        #print path
                         files = []
                         ips = []
-                        domains = []
-                        filtered_domains = []
+                        extracted_urls = []
                         process = Thread(target=check_extension,
-                                         args=[result, folder, extensions_id[_ext], _ext, url,
-                                               headers, path, files, ips, domains,
-                                               filtered_domains])
+                                         args=[result, folder, extensions_id[_ext], url,
+                                               headers, path, files, ips,
+                                               extracted_urls, str(i + ':' + username)])
                         process.start()
                         threads.append(process)
                     for process in threads:
                         process.join()
 
-                    for n in range(len(result)):
-                        print("\n\t" + BOLD + result[n]['folder'] + ":  " \
-                            + result[n]['extension'] + ":  " + result[n]['name'] + RESETBOLD)
-                        if str(len(result[n]['filtered_domains'])) > "0":
-                            print(BOLD + "\t\t" + "Printing all URLs found in extension's files" \
-                             + "(except safe sites configured in the script):" + RESETBOLD)
-                            for f in result[n]['filtered_domains']:
-                                print("\t\t\t" + f)
-                        if str(len(ips)) != "0":
-                            print(BOLD + "\t\t" + "Printing all IPs found in extension's files:" \
-                                 + RESETBOLD)
-                            for _ip in ips:
-                                print("\t\t\t" + _ip)
-
+                    print(json.dumps(result))
 
 
 if __name__ == "__main__":
