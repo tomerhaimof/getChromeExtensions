@@ -35,7 +35,4 @@ For example:
     powershell.exe -executionpolicy bypass -file "c:\cyberiko\getChromeExtensions.ps1"
     
 In order to get information from all users, it should run with admin privileges (Run As Administrator) 
-  
 
-
-## By Tomer Haimof
