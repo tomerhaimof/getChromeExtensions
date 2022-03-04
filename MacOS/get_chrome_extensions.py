@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 '''
 This script will print all of the Google Chrome and Chromium extensions from all users
